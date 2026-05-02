@@ -1,0 +1,40 @@
+name: Security Prices Reconciliation
+description: Daily price validation between market data vendor and internal pricing library
+
+matching_keys:
+  - source_col: isin
+    target_col: isin
+    normalization: uppercase
+  - source_col: price_date
+    target_col: price_date
+    normalization: date
+
+field_configs:
+  close_price:
+    tolerance_type: basis_points
+    tolerance_value: 5
+    weight: 1.0
+    is_regulatory: true
+  bid_price:
+    tolerance_type: basis_points
+    tolerance_value: 10
+    weight: 0.7
+    is_regulatory: false
+  ask_price:
+    tolerance_type: basis_points
+    tolerance_value: 10
+    weight: 0.7
+    is_regulatory: false
+  adjusted_close:
+    tolerance_type: basis_points
+    tolerance_value: 1
+    weight: 0.9
+    is_regulatory: true
+  volume:
+    tolerance_type: percentage
+    tolerance_value: 1.0
+    weight: 0.3
+    is_regulatory: false
+
+classification_mode: worst_field
+missing_row_severity: HIGH

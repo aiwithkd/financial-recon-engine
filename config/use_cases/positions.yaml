@@ -1,0 +1,45 @@
+name: Positions Reconciliation
+description: End-of-day positions between portfolio management system and custodian
+
+matching_keys:
+  - source_col: account_id
+    target_col: account_id
+    normalization: uppercase
+  - source_col: security_id
+    target_col: security_id
+    normalization: isin
+
+field_configs:
+  quantity:
+    tolerance_type: absolute
+    tolerance_value: 0.0
+    weight: 1.0
+    is_regulatory: true
+  price:
+    tolerance_type: percentage
+    tolerance_value: 0.01
+    weight: 0.8
+    is_regulatory: false
+  market_value:
+    tolerance_type: absolute
+    tolerance_value: 1.0
+    weight: 1.0
+    is_regulatory: true
+  accrued_interest:
+    tolerance_type: absolute
+    tolerance_value: 0.01
+    weight: 0.5
+    is_regulatory: false
+  unrealized_pnl:
+    tolerance_type: absolute
+    tolerance_value: 5.0
+    weight: 0.6
+    is_regulatory: false
+  currency:
+    tolerance_type: exact
+    tolerance_value: 0
+    weight: 1.0
+    is_regulatory: true
+
+classification_mode: worst_field
+missing_row_severity: HIGH

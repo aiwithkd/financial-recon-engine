@@ -1,0 +1,22 @@
+reconciliation:
+  classification_mode: worst_field       # any_break | worst_field
+  missing_row_severity: HIGH
+  max_rows_per_file: 200000
+  fuzzy_key_normalization: true
+  composite_key_fallback: true
+
+tolerances:
+  default_numeric: percentage
+  default_numeric_value: 0.01
+  default_date_days: 0
+  default_text: exact
+
+export:
+  include_matched_sheet: true
+  include_config_audit: true
+  freeze_header_rows: true
+  max_rows_per_sheet: 100000
+
+ui:
+  preview_rows: 100
+  break_table_page_size: 50

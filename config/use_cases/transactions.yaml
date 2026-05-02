@@ -1,0 +1,51 @@
+name: Transaction Reconciliation
+description: Executed trades between OMS and custodian settlement records
+
+matching_keys:
+  - source_col: account_id
+    target_col: account_id
+    normalization: uppercase
+  - source_col: isin
+    target_col: isin
+    normalization: isin
+  - source_col: trade_date
+    target_col: trade_date
+    normalization: date
+  - source_col: quantity
+    target_col: quantity
+    normalization: numeric
+
+field_configs:
+  trade_price:
+    tolerance_type: basis_points
+    tolerance_value: 2
+    weight: 0.9
+    is_regulatory: true
+  gross_amount:
+    tolerance_type: absolute
+    tolerance_value: 0.10
+    weight: 1.0
+    is_regulatory: true
+  net_amount:
+    tolerance_type: absolute
+    tolerance_value: 0.10
+    weight: 1.0
+    is_regulatory: true
+  commission:
+    tolerance_type: absolute
+    tolerance_value: 0.01
+    weight: 0.6
+    is_regulatory: false
+  settlement_date:
+    tolerance_type: date_days
+    tolerance_value: 0
+    weight: 0.8
+    is_regulatory: true
+  transaction_type:
+    tolerance_type: exact
+    tolerance_value: 0
+    weight: 0.7
+    is_regulatory: false
+
+classification_mode: worst_field
+missing_row_severity: HIGH
