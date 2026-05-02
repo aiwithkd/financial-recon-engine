@@ -23,7 +23,7 @@ from src.engine.models import FieldConfig, MatchKey, ReconConfig
 from src.reporting.excel_exporter import export as export_excel
 from src.ui import state
 
-# ── Page config ───────────────────────────────────────────────────────────────
+# Page config
 st.set_page_config(
     page_title="Financial Recon Engine",
     page_icon="⚖️",
@@ -31,7 +31,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Global styles ─────────────────────────────────────────────────────────────
+# Global styles
 st.markdown("""
 <style>
 [data-testid="stMetricValue"] { font-size: 1.6rem; font-weight: 700; }
@@ -41,7 +41,7 @@ div[data-testid="column"] { padding: 0 0.4rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+# Sidebar
 with st.sidebar:
     st.image("https://img.icons8.com/color/96/scales.png", width=56)
     st.title("Recon Engine")
@@ -66,9 +66,9 @@ with st.sidebar:
         st.rerun()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # STAGE 1 — UPLOAD
-# ══════════════════════════════════════════════════════════════════════════════
+
 def render_upload():
     st.title("⚖️ Financial Data Reconciliation Engine")
     st.markdown("Compare two financial datasets row-by-row with configurable tolerance thresholds, auto-detected join keys, and a colour-coded break report.")
@@ -167,9 +167,9 @@ def render_upload():
         st.rerun()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # STAGE 2 — CONFIGURE
-# ══════════════════════════════════════════════════════════════════════════════
+
 def render_configure():
     app = state.get()
     src = app.source_df
@@ -181,7 +181,7 @@ def render_configure():
 
     col_keys, col_fields = st.columns([1, 1], gap="large")
 
-    # ── Matching Keys ──────────────────────────────────────────────────────────
+    # Matching keys
     with col_keys:
         st.subheader("🔑 Matching Keys")
 
@@ -215,7 +215,7 @@ def render_configure():
             nm = c3.selectbox("Norm", ["none", "uppercase", "isin", "numeric", "date"], index=["none", "uppercase", "isin", "numeric", "date"].index(default_norm) if default_norm in ["none", "uppercase", "isin", "numeric", "date"] else 0, key=f"nm_{i}")
             key_rows.append(MatchKey(sc, tc, nm))
 
-    # ── Field Tolerances ───────────────────────────────────────────────────────
+    # Field tolerances
     with col_fields:
         st.subheader("📐 Field Tolerances")
         st.caption("Only fields listed here will be compared. Others are ignored.")
@@ -265,9 +265,9 @@ def render_configure():
                 st.error(f"Reconciliation failed: {e}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # STAGE 3 — RESULTS
-# ══════════════════════════════════════════════════════════════════════════════
+
 def render_results():
     app = state.get()
     report = app.report
@@ -280,7 +280,7 @@ def render_results():
     st.title(f"📊 Reconciliation Results — {report.config.use_case_name}")
     st.caption(f"Run at {report.run_timestamp.strftime('%Y-%m-%d %H:%M UTC')} | Source: {app.source_name} | Target: {app.target_name}")
 
-    # ── KPI Cards ──────────────────────────────────────────────────────────────
+    # KPI cards
     cols = st.columns(7)
     metrics = [
         ("Match Rate", f"{kpis.match_rate_pct:.1f}%", ""),
@@ -296,7 +296,7 @@ def render_results():
 
     st.divider()
 
-    # ── Waterfall + Field heatmap ──────────────────────────────────────────────
+    # Charts
     chart_col, heatmap_col = st.columns([1, 1], gap="large")
 
     with chart_col:
@@ -344,7 +344,7 @@ def render_results():
 
     st.divider()
 
-    # ── Detail Tables ──────────────────────────────────────────────────────────
+    # Detail tables
     tab_breaks, tab_tol, tab_missing, tab_matched, tab_fields = st.tabs([
         f"🔴 Breaks ({kpis.breaks})",
         f"🟡 Tolerance ({kpis.tolerance_hits})",
@@ -387,7 +387,7 @@ def render_results():
 
     st.divider()
 
-    # ── Export ─────────────────────────────────────────────────────────────────
+    # Export
     c1, c2 = st.columns([1, 5])
     with c1:
         with st.spinner("Preparing Excel report..."):
@@ -416,9 +416,9 @@ def _render_table(df: pd.DataFrame, empty_msg: str, max_rows: int = 500):
     st.dataframe(display, use_container_width=True, height=380)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # ROUTER
-# ══════════════════════════════════════════════════════════════════════════════
+
 app = state.get()
 
 if app.stage == "upload":
