@@ -1,6 +1,7 @@
 """Generate realistic sample data for all three reconciliation use cases."""
 from __future__ import annotations
 
+import os
 import random
 from pathlib import Path
 
@@ -11,7 +12,7 @@ SEED = 42
 rng = np.random.default_rng(SEED)
 random.seed(SEED)
 
-OUT = Path(__file__).parent.parent / "tests" / "fixtures"
+OUT = Path(os.path.abspath(__file__)).parent.parent / "tests" / "fixtures"
 OUT.mkdir(parents=True, exist_ok=True)
 
 ISINS = [f"US{str(i).zfill(10)}" for i in range(1000, 1200)]

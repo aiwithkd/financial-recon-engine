@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import yaml
@@ -7,7 +8,7 @@ import yaml
 from src.engine.models import FieldConfig, MatchKey, ReconConfig
 
 
-_USE_CASE_DIR = Path(__file__).parent.parent.parent / "config" / "use_cases"
+_USE_CASE_DIR = Path(os.getcwd()) / "config" / "use_cases"
 
 
 def load_use_case(name: str) -> ReconConfig:

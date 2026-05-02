@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Works both locally and on Streamlit Cloud (cwd = project root when launched via app.py)
+ROOT = Path(os.getcwd())
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -79,7 +83,7 @@ def render_upload():
         if mode == "Use sample data":
             use_cases = list_use_cases()
             uc = st.selectbox("Select use case", use_cases, format_func=lambda x: x.replace("_", " ").title())
-            fixtures_dir = Path(__file__).parent.parent.parent / "tests" / "fixtures"
+            fixtures_dir = ROOT / "tests" / "fixtures"
             src_path = fixtures_dir / f"{uc}_source.csv"
             tgt_path = fixtures_dir / f"{uc}_target.csv"
 
